@@ -1,10 +1,11 @@
 package br.com.missio.apipagamento.service;
 
 
+import br.com.missio.apipagamento.dto.BoletoDTO;
 import br.com.missio.apipagamento.entity.BoletoEntity;
 import br.com.missio.apipagamento.entity.enums.StatusBoleto;
+import br.com.missio.apipagamento.mapper.BoletoMapper;
 import br.com.missio.apipagamento.repository.BoletoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class BoletoService {
         this.boletoRepository = boletoRepository;
     }
 
-    public ? salvarBoleto(String codigoBarras) {
+    public BoletoDTO salvarBoleto(String codigoBarras) {
         Objects.requireNonNull(codigoBarras, "Código de barras não pode ser nulo");
         
         var boletoOpional = boletoRepository.findByCodigoBarras(codigoBarras);
@@ -36,6 +37,8 @@ public class BoletoService {
                 .build();
 
         boletoRepository.save(boleto);
-        
+
+        return BoletoMapper.toBoletoDTO(boleto);
+
     }
 }
