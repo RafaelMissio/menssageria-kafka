@@ -1,6 +1,7 @@
 package br.com.missio.apipagamento.service;
 
 
+import br.com.missio.apipagamento.controller.exception.AplicationException;
 import br.com.missio.apipagamento.dto.BoletoDTO;
 import br.com.missio.apipagamento.entity.BoletoEntity;
 import br.com.missio.apipagamento.entity.enums.StatusBoleto;
@@ -21,12 +22,12 @@ public class BoletoService {
         this.boletoRepository = boletoRepository;
     }
 
-    public BoletoDTO salvarBoleto(String codigoBarras) {
+    public BoletoDTO salvar(String codigoBarras) {
         Objects.requireNonNull(codigoBarras, "Código de barras não pode ser nulo");
         
         var boletoOpional = boletoRepository.findByCodigoBarras(codigoBarras);
         if (boletoOpional.isPresent()) {
-            throw new RuntimeException("Boleto já cadastrado");
+            throw new AplicationException("Boleto já cadastrado");
         }
         
         var boleto = BoletoEntity.builder()
