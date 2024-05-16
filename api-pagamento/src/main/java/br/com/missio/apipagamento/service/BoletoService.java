@@ -7,6 +7,7 @@ import br.com.missio.apipagamento.entity.BoletoEntity;
 import br.com.missio.apipagamento.entity.enums.StatusBoleto;
 import br.com.missio.apipagamento.mapper.BoletoMapper;
 import br.com.missio.apipagamento.repository.BoletoRepository;
+import br.com.missio.apipagamento.service.kafka.BoletoProducer;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,11 @@ public class BoletoService {
 
     private final BoletoRepository boletoRepository;
 
-    public BoletoService(BoletoRepository boletoRepository) {
+    private final BoletoProducer boletoProducer;
+
+    public BoletoService(BoletoRepository boletoRepository, BoletoProducer boletoProducer) {
         this.boletoRepository = boletoRepository;
+        this.boletoProducer = boletoProducer;
     }
 
     public BoletoDTO salvar(String codigoBarras) {
@@ -38,6 +42,7 @@ public class BoletoService {
                 .build();
 
         boletoRepository.save(boleto);
+        boletoProducer.enviarMensagem(BoletoMapper.toBoletoAvro(boleto));
 
         return BoletoMapper.toBoletoDTO(boleto);
 
