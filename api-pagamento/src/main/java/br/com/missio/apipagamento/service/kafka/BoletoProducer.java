@@ -1,8 +1,7 @@
 package br.com.missio.apipagamento.service.kafka;
 
-import br.com.missio.apipagamento.dto.BoletoDTO;
+
 import br.com.missio.avro.Boleto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
